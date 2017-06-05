@@ -9,15 +9,15 @@ import praw
 
 REDDIT = praw.Reddit("bot")
 SUBREDDIT = REDDIT.subreddit("FireEmblemHeroes")
+
+
 def start_bot():
     """Does stuff"""
-
-
     for comment in SUBREDDIT.stream.comments():
-        is_bot_called = re.search("<<.*>>", comment.body)
-        if is_bot_called:
-            search_item = is_bot_called.group(0)[2:-2]
-            
+        for match in re.finditer("<<([^>]*)>>", comment.body):
+            query = match.group(1)
+
+            comment.reply()
 
     if not os.path.isfile("posts_replied_to.txt"):
         posts_replied_to = []
