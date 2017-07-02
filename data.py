@@ -1,1 +1,0 @@
-heroes = {"abel": ["https://feheroes.gamepedia.com/Abel", "https://fireemblem.gamepress.gg/hero/Abel"]}
