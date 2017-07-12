@@ -2,6 +2,7 @@
 """Bot that reads through FireEmblemHeroes subreddit and replies to hero mentions
 with detailed info about said hero"""
 import re
+import os
 import praw
 import GamePedia
 import Reply
