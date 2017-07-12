@@ -1,9 +1,9 @@
 """Handles GamePedia requests"""
 import requests
-from unidecode import unidecode
 from bs4 import BeautifulSoup
 
 def get_category(soup):
+    """Find category at bottom of page to know which comment handler to use"""
     category_div = soup.find("div", "mw-normal-catlinks")
     if category_div:
         category = category_div.find_all("a")[1].get_text().encode('utf-8').strip()
@@ -12,6 +12,7 @@ def get_category(soup):
         return None
 
 def hero_handler(soup):
+    """Get Hero bio and stats of min/max level at 5 star rating"""
     bio = soup.find("div", "hero-infobox").next_sibling.next_sibling.get_text().encode('utf-8').strip()
     min_stats_rows = soup.find_all("table", "wikitable")[1].find_all("tr")
     max_stats_rows = soup.find_all("table", "wikitable")[2].find_all("tr")
@@ -28,19 +29,21 @@ def hero_handler(soup):
     return {"details": details, "type": "Hero"}
 
 def weapon_handler(soup):
+    """Get weapon details from box"""
     rows = soup.find("div", "hero-infobox").find_all("tr")
     details = []
     for i, row in enumerate(rows[2:]):
         detail = row.get_text().encode("utf-8").strip()
-        if i == 5:
+        if i == 5: #Special Effect
             details.append(detail)
-        elif i == 2:
+        elif i == 2: #SP Cost
             details.append(detail.split()[2])
         else:
             details.append(detail.split()[1])
     return {"details": details, "type": "Weapon"}
 
 def special_handler(soup):
+    """Get special details from first table"""
     table = soup.find("table", "skills-table").find_all("td")
     details = []
     for data in table:
@@ -50,10 +53,13 @@ def special_handler(soup):
     return {"details": details, "type": "Special"}
 
 def passive_handler(soup):
-    """Don't know what I want to do for passives yet"""
+    """Get passive details from wiki table"""
     rows = soup.find_all("table", "wikitable")[0].find_all("tr")
     details = []
     num_rows = len(rows)
+    # if only 1 detail row (2 because +1 for header), then get everything
+    # else get restriction and skill type from first row and then get rest of details
+    # for highest level of the skill
     if num_rows == 2:
         for data in rows[1].find_all("td")[1:]:
             details.append(data.get_text().encode("utf-8").strip())
@@ -67,6 +73,7 @@ def passive_handler(soup):
     return {"details": details, "type": "Passive"}
 
 def seal_handler(soup):
+    """Get seal details from skills table"""
     table = soup.find("table", "skills-table").find_all("td")
     details = []
     for data in table[1:]:

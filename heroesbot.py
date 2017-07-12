@@ -1,19 +1,22 @@
 #!/usr/bin/python
 """Bot that reads through FireEmblemHeroes subreddit and replies to hero mentions
 with detailed info about said hero"""
-import os
-import pdb
 import re
 import praw
 import GamePedia
 import Reply
 import traceback
 
-REDDIT = praw.Reddit("bot")
+REDDIT = praw.Reddit(client_id=os.environ["CLIENT_ID"],
+    client_secret=os.environ["CLIENT_SECRET"],
+    password=os.environ["REDDIT_PASSWORD"],
+    username=os.environ["REDDIT_USERNAME"],
+    user_agent="feheroes-bot for reddit")
 SUBREDDIT = REDDIT.subreddit("jackytestsub")
 
-def start_bot():
-    """Begin streaming comments from SUBREDDIT"""
+def run_bot():
+    """Try to reply to comments that query bot
+     Excepts in place for reddit rate limits"""
     data_list = []
     try:
         for comment in SUBREDDIT.stream.comments():
@@ -33,4 +36,4 @@ def start_bot():
     except:
         traceback.print_exc()
         print "Bot exiting"
-start_bot()
+run_bot()
