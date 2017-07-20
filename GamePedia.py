@@ -1,7 +1,6 @@
 """Handles GamePedia requests"""
 import requests
 from bs4 import BeautifulSoup
-import urllib
 
 def get_category(soup):
     """Find category at bottom of page to know which comment handler to use"""
