@@ -2,9 +2,9 @@
 
 def build_reply(data_list):
     reply_list = []
-    for pair in data_list:
-        gamepedia_data = pair["data"]
-        query = pair["url"][30:].replace("_", " ")
+    for query_item in data_list:
+        gamepedia_data = query_item["data"]
+        query = query_item["query"]
         headline = "#" + gamepedia_data["type"] + ": " + query + " \n\n"
         curr_reply = ""
         if gamepedia_data["type"] == "Hero":
@@ -19,13 +19,13 @@ def build_reply(data_list):
             curr_reply = seal_reply(gamepedia_data["details"])
 
         reply_list.append(headline+curr_reply)
-        reply_list.append(createFooter(pair["url"]) + "\n\n***")
+        reply_list.append(createFooter(query_item["url"]) + "\n\n***")
     total_reply = "\n\n".join(reply_list)
     return total_reply
 
 def hero_reply(details, hero):
     stats_list = details["stats_list"]
-    bio = "[](#" + hero + ") *" + details["bio"] + "*\n\n 5 Star Rarity \n\n"
+    bio = "*" + details["bio"] + "*\n\n 5 Star Rarity \n\n"
     table_header = "Level|HP|Atk|Spd|Def|Res\n"
     table_alignment = ":--:|:--:|:--:|:--:|:--:|:--:\n"
     table_content = "|".join(stats_list[0:6]) + "\n" + "|".join(stats_list[6:]) + "\n\n\n\n"

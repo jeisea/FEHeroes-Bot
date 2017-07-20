@@ -1,6 +1,7 @@
 """Handles GamePedia requests"""
 import requests
 from bs4 import BeautifulSoup
+import urllib
 
 def get_category(soup):
     """Find category at bottom of page to know which comment handler to use"""
@@ -109,25 +110,34 @@ def get_closest_url(gamepedia, query):
             return res_item[0]
     return None
 
+def get_correct_name(response):
+    """Finds proper name of query (e.g., Lon'qu instead of Lonqu)"""
+    soup = BeautifulSoup(response.content, "html.parser")
+    correct_name = soup.find("h1", "firstHeading").get_text()
+    return correct_name
+
 def search_gamepedia(query):
     """Searches GamePedia wiki for query in the reddit comment"""
     gamepedia = requests.Session()
     gamepedia.headers.update({"User-Agent": "feheroes-bot"})
-    query = query.replace(" ", "%20")
+    query = requests.utils.quote(query)
     search_url = "http://feheroes.gamepedia.com/index.php?search=" + query
-
     try:
         response = gamepedia.get(search_url, timeout=5)
         if response.url == search_url:
             closest_url = get_closest_url(gamepedia, query)
             if closest_url:
                 response = gamepedia.get(closest_url, timeout=5)
-                return [parse_response(response), closest_url]
+                correct_name = get_correct_name(response)
+                return [parse_response(response), closest_url, correct_name]
             else:
                 return None
         else:
-            return [parse_response(response), response.url]
+            correct_name = get_correct_name(response)
+            return [parse_response(response), response.url, correct_name]
         gamepedia.close()
     except:
         gamepedia.close()
     return
+
+search_gamepedia("Sapphire Lance+")

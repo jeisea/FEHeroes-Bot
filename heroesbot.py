@@ -25,7 +25,7 @@ def run_bot():
                 query = match.group(1)
                 gamepedia_data = GamePedia.search_gamepedia(query)
                 if gamepedia_data:
-                    data_list.append({"data": gamepedia_data[0], "url": gamepedia_data[1]})
+                    data_list.append({"data": gamepedia_data[0], "url": gamepedia_data[1], "query": gamepedia_data[2]})
             if len(data_list) > 0:
                 try:
                     comment.reply(Reply.build_reply(data_list))
