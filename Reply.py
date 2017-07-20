@@ -20,7 +20,7 @@ def build_reply(data_list):
 
         reply_list.append(headline+curr_reply)
         reply_list.append(createFooter(pair["url"]) + "\n\n***")
-    total_reply = "".join(reply_list)
+    total_reply = "\n\n".join(reply_list)
     return total_reply
 
 def hero_reply(details, hero):
