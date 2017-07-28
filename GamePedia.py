@@ -5,9 +5,14 @@ from bs4 import BeautifulSoup
 def get_category(soup):
     """Find category at bottom of page to know which comment handler to use"""
     category_div = soup.find("div", "mw-normal-catlinks")
+    valid_categories = ["Heroes", "Weapons", "Specials", "Passives", "Sacred Seals"]
+    found_category = None
     if category_div:
         category = category_div.find_all("a")[1].get_text().encode('utf-8').strip()
-        return category
+        for category in category_div.find_all("a"):
+            if category.get_text().encode('utf-8').strip() in valid_categories:
+                found_category = category.get_text().encode('utf-8').strip()
+        return found_category
     else:
         return None
 
@@ -139,4 +144,4 @@ def search_gamepedia(query):
         gamepedia.close()
     return
 
-search_gamepedia("Sapphire Lance+")
+search_gamepedia("Xander (Nohrian Summer)")
