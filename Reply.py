@@ -26,9 +26,9 @@ def build_reply(data_list):
 def hero_reply(details, hero):
     stats_list = details["stats_list"]
     bio = "*" + details["bio"] + "*\n\n 5 Star Rarity \n\n"
-    table_header = "Level|HP|Atk|Spd|Def|Res\n"
-    table_alignment = ":--:|:--:|:--:|:--:|:--:|:--:\n"
-    table_content = "|".join(stats_list[0:6]) + "\n" + "|".join(stats_list[6:]) + "\n\n\n\n"
+    table_header = "Level|HP|Atk|Spd|Def|Res|Total\n"
+    table_alignment = ":--:|:--:|:--:|:--:|:--:|:--:|:--:\n"
+    table_content = "|".join(stats_list[0:7]) + "\n" + "|".join(stats_list[7:]) + "\n\n\n\n"
     reply = bio + table_header + table_alignment + table_content
     return reply
 
