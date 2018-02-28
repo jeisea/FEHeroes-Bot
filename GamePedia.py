@@ -144,4 +144,4 @@ def search_gamepedia(query):
         gamepedia.close()
     return
 
-search_gamepedia("Xander (Nohrian Summer)")
+# print search_gamepedia("Camus")

@@ -17,8 +17,7 @@ def build_reply(data_list):
             curr_reply = passive_reply(gamepedia_data["details"])
         else:
             curr_reply = seal_reply(gamepedia_data["details"])
-
-        reply_list.append(headline+curr_reply)
+        reply_list.append(headline+curr_reply.decode('utf-8'))
         reply_list.append(createFooter(query_item["url"]) + "\n\n***")
     total_reply = "\n\n".join(reply_list)
     return total_reply
