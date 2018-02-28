@@ -13,7 +13,7 @@ REDDIT = praw.Reddit(client_id=os.environ["CLIENT_ID"],
     password=os.environ["REDDIT_PASSWORD"],
     username=os.environ["REDDIT_USERNAME"],
     user_agent="feheroes-bot for reddit")
-SUBREDDIT = REDDIT.subreddit("FireEmblemHeroes")
+SUBREDDIT = REDDIT.subreddit("testingground4bots")
 
 def run_bot():
     """Try to reply to comments that query bot
