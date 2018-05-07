@@ -12,7 +12,8 @@ def get_category(soup):
         for category in category_div.find_all("a"):
             if category.get_text().encode('utf-8').strip() in valid_categories:
                 found_category = category.get_text().encode('utf-8').strip()
-        return found_category
+                print found_category
+                return found_category
     else:
         return None
 
@@ -62,27 +63,16 @@ def passive_handler(soup):
     rows = soup.find_all("table", "wikitable")[0].find_all("tr")
     details = []
     num_rows = len(rows)
-    # if only 1 detail row (2 because +1 for header), then get everything
-    # else get restriction and skill type from first row and then get rest of details
-    # for highest level of the skill
-    if num_rows == 2:
-        for data in rows[1].find_all("td")[1:]:
-            details.append(data.get_text().encode("utf-8").strip())
-    else:
-        restriction = rows[1].find_all("td")[4].get_text().encode("utf-8").strip().replace("\xc2\xa0", "")
-        skill_type = rows[1].find_all("td")[5].get_text().encode("utf-8").strip()
-        for data in rows[num_rows-1].find_all("td")[1:]:
-            details.append(data.get_text().strip())
-        details.append(restriction)
-        details.append(skill_type)
+    
+    for data in rows[num_rows-1].find_all("td")[1:]:
+        details.append(data.get_text().encode("utf-8").strip())
     return {"details": details, "type": "Passive"}
 
 def seal_handler(soup):
     """Get seal details from skills table"""
     table = soup.find("table", "skills-table").find_all("td")
     details = []
-    last_row_start = len(table) - 3
-    for data in table[last_row_start:]:
+    for data in table[1:]:
         detail = data.get_text().encode("utf-8").strip()
         details.append(detail)
     return {"details": details, "type": "Seal"}
@@ -94,7 +84,6 @@ def assist_handler(soup):
     for data in table:
         detail = data.get_text().encode("utf-8").strip()
         details.append(detail)
-    print details
     return {"details": details, "type": "Assist"}
 
 def parse_response(response):
@@ -157,4 +146,4 @@ def search_gamepedia(query):
         gamepedia.close()
     return
 
-search_gamepedia("reposition")
+# search_gamepedia("reposition")

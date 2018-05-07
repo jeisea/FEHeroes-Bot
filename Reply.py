@@ -15,6 +15,8 @@ def build_reply(data_list):
             curr_reply = special_reply(gamepedia_data["details"])
         elif gamepedia_data["type"] == "Passive":
             curr_reply = passive_reply(gamepedia_data["details"])
+        elif gamepedia_data["type"] == "Assist":
+            curr_reply = assist_reply(gamepedia_data["details"])
         else:
             curr_reply = seal_reply(gamepedia_data["details"])
         reply_list.append(headline+curr_reply.decode('utf-8'))
@@ -33,6 +35,7 @@ def hero_reply(details, hero):
 
 def assist_reply(details):
     effect = "**" + details[2] + "**\n\n"
+    del details[2]
     table_header = "Name|Range|SP Cost|Exclusive\n"
     table_alignment = ":--:|:--:|:--:|:--:\n"
     table_content = "|".join(details[0:4]) + "\n\n\n\n"
@@ -56,10 +59,11 @@ def special_reply(details):
     return reply
 
 def passive_reply(details):
-    effect = "**" + details[1] + "**\n\n"
-    table_header = "Name|SP Cost|Inherit Restriction|Type\n"
-    table_alignment = ":--:|:--:|:--:|:--:\n"
-    table_content = details[0] + "|" + "|".join(details[2:]) + "\n\n\n\n"
+    effect = "**" + details[2] + "**\n\n"
+    del details[2]
+    table_header = "Name|SP Cost\n"
+    table_alignment = ":--:|:--:\n"
+    table_content = "|".join(details) + "\n\n\n\n"
     reply = effect + table_header + table_alignment + table_content
     return reply
 
