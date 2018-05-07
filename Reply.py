@@ -31,6 +31,14 @@ def hero_reply(details, hero):
     reply = bio + table_header + table_alignment + table_content
     return reply
 
+def assist_reply(details):
+    effect = "**" + details[2] + "**\n\n"
+    table_header = "Name|Range|SP Cost|Exclusive\n"
+    table_alignment = ":--:|:--:|:--:|:--:\n"
+    table_content = "|".join(details[0:4]) + "\n\n\n\n"
+    reply = effect + table_header + table_alignment + table_content + "\n\n\n\n"
+    return reply
+
 def weapon_reply(details):
     special_effect = "**" + ": ".join(details[4:]) + "**\n\n"
     table_header = "Might|Range|SP Cost|Exclusive\n"

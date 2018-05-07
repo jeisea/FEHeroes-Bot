@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 def get_category(soup):
     """Find category at bottom of page to know which comment handler to use"""
     category_div = soup.find("div", "mw-normal-catlinks")
-    valid_categories = ["Heroes", "Weapons", "Specials", "Passives", "Sacred Seals"]
+    valid_categories = ["Heroes", "Weapons", "Specials", "Passives", "Sacred Seals", "Assists"]
     found_category = None
     if category_div:
         category = category_div.find_all("a")[1].get_text().encode('utf-8').strip()
@@ -85,8 +85,17 @@ def seal_handler(soup):
     for data in table[last_row_start:]:
         detail = data.get_text().encode("utf-8").strip()
         details.append(detail)
-    print details
     return {"details": details, "type": "Seal"}
+
+def assist_handler(soup):
+    """Get assists details from skills table"""
+    table = soup.find("table", "skills-table").find_all("td")
+    details = []
+    for data in table:
+        detail = data.get_text().encode("utf-8").strip()
+        details.append(detail)
+    print details
+    return {"details": details, "type": "Assist"}
 
 def parse_response(response):
     soup = BeautifulSoup(response.content, "html.parser")
@@ -99,6 +108,8 @@ def parse_response(response):
         return special_handler(soup)
     elif category == "Passives":
         return passive_handler(soup)
+    elif category == "Assists":
+        return assist_handler(soup)
     else:
         return seal_handler(soup)
 
@@ -146,4 +157,4 @@ def search_gamepedia(query):
         gamepedia.close()
     return
 
-search_gamepedia("obstruct")
+search_gamepedia("reposition")
