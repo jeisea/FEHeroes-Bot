@@ -81,9 +81,11 @@ def seal_handler(soup):
     """Get seal details from skills table"""
     table = soup.find("table", "skills-table").find_all("td")
     details = []
-    for data in table[1:]:
+    last_row_start = len(table) - 3
+    for data in table[last_row_start:]:
         detail = data.get_text().encode("utf-8").strip()
         details.append(detail)
+    print details
     return {"details": details, "type": "Seal"}
 
 def parse_response(response):
@@ -144,4 +146,4 @@ def search_gamepedia(query):
         gamepedia.close()
     return
 
-# print search_gamepedia("Camus")
+search_gamepedia("obstruct")
