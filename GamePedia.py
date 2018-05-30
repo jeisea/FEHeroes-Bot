@@ -12,7 +12,6 @@ def get_category(soup):
         for category in category_div.find_all("a"):
             if category.get_text().encode('utf-8').strip() in valid_categories:
                 found_category = category.get_text().encode('utf-8').strip()
-                print found_category
                 return found_category
     else:
         return None
@@ -20,8 +19,8 @@ def get_category(soup):
 def hero_handler(soup):
     """Get Hero bio and stats of min/max level at 5 star rating"""
     bio = soup.find("div", "hero-infobox").next_sibling.next_sibling.get_text().encode('utf-8').strip()
-    min_stats_rows = soup.find_all("table", "wikitable")[1].find_all("tr")
-    max_stats_rows = soup.find_all("table", "wikitable")[2].find_all("tr")
+    min_stats_rows = soup.find_all("table", "wikitable")[2].find_all("tr")
+    max_stats_rows = soup.find_all("table", "wikitable")[3].find_all("tr")
     min_stats = min_stats_rows[len(min_stats_rows)-1].find_all("td")
     max_stats = max_stats_rows[len(max_stats_rows)-1].find_all("td")
     stats_list = []
@@ -31,6 +30,7 @@ def hero_handler(soup):
     stats_list.append("40")
     for stat in max_stats[1:]:
         stats_list.append(stat.get_text().encode("utf-8").strip())
+    print stats_list
     details = {"bio": bio, "stats_list": stats_list}
     return {"details": details, "type": "Hero"}
 
@@ -63,7 +63,7 @@ def passive_handler(soup):
     rows = soup.find_all("table", "wikitable")[0].find_all("tr")
     details = []
     num_rows = len(rows)
-    
+
     for data in rows[num_rows-1].find_all("td")[1:]:
         details.append(data.get_text().encode("utf-8").strip())
     return {"details": details, "type": "Passive"}
@@ -146,4 +146,4 @@ def search_gamepedia(query):
         gamepedia.close()
     return
 
-# search_gamepedia("reposition")
+search_gamepedia("Kana: Dragon Spawn")
