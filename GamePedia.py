@@ -23,6 +23,12 @@ def hero_handler(soup):
     max_stats_rows = soup.find_all("table", "wikitable")[3].find_all("tr")
     min_stats = min_stats_rows[len(min_stats_rows)-1].find_all("td")
     max_stats = max_stats_rows[len(max_stats_rows)-1].find_all("td")
+    # Check if wiki page is in different format and we are actually looking at growth page
+    if int(max_stats[6].get_text().encode("utf-8").strip()) < 100:
+        min_stats_rows = soup.find_all("table", "wikitable")[1].find_all("tr")
+        max_stats_rows = soup.find_all("table", "wikitable")[2].find_all("tr")
+        min_stats = min_stats_rows[len(min_stats_rows)-1].find_all("td")
+        max_stats = max_stats_rows[len(max_stats_rows)-1].find_all("td")
     stats_list = []
     stats_list.append("1")
     for stat in min_stats[1:]:
@@ -146,4 +152,4 @@ def search_gamepedia(query):
         gamepedia.close()
     return
 
-search_gamepedia("Kana: Dragon Spawn")
+search_gamepedia("Karel")
